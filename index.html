@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seiklahsnya - Website Donasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e;
+            color: #e4e4e7;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+        .container-card {
+            background-color: #24263b;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .gradient-button {
+            background: linear-gradient(90deg, #a78bfa, #8b5cf6);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: transform 0.2s ease-in-out;
+        }
+        .gradient-button:hover {
+            transform: translateY(-2px);
+        }
+        .copy-button {
+            background-color: #4a4a61;
+            color: #e4e4e7;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .copy-button:hover {
+            background-color: #5d5d7a;
+        }
+        #qrcode-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 1s ease-in-out;
+        }
+        .intro-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        .intro-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 1s forwards;
+            margin-top: 1rem;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: #24263b;
+            z-index: 900;
+            transition: left 0.3s ease-in-out;
+            padding: 2rem;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+        #sidebar.open {
+            left: 0;
+        }
+        .hamburger-icon {
+            cursor: pointer;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1001;
+            font-size: 2rem;
+            line-height: 0;
+        }
+        .content-hidden {
+            display: none;
+        }
+        .bar {
+            width: 20px;
+            background-color: #a78bfa;
+            margin: 0 2px;
+            transition: height 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            font-size: 0.75rem;
+            color: #e4e4e7;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Animasi Pembuka -->
+    <div id="intro-overlay" class="intro-overlay">
+        <img src="https://i.ibb.co.com/ksptZTRZ/IMG-20250908-WA0052.jpg" alt="Logo Seiklahsnya" class="intro-logo">
+        <p id="intro-text" class="intro-text">Donasi seikhlasnya</p>
+    </div>
+
+    <!-- Ikon Hamburger -->
+    <div class="hamburger-icon" onclick="toggleSidebar()">
+        &#9776;
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="flex flex-col space-y-4">
+        <h3 class="text-xl font-bold mb-4">Kontak & Komunitas</h3>
+        <a href="https://wa.me/628888536312" target="_blank" class="gradient-button text-center">WhatsApp 1: 08888536312</a>
+        <a href="https://wa.me/6288226705434" target="_blank" class="gradient-button text-center">WhatsApp 2: 088226705434</a>
+        <a href="https://t.me/PaongDev" target="_blank" class="gradient-button text-center">Telegram: t.me/PaongDev</a>
+        <a href="https://chat.whatsapp.com/JBd0NnWJhnw7ksvImVqFWA" target="_blank" class="gradient-button text-center">Komunitas WhatsApp</a>
+        <a href="https://whatsapp.com/channel/0029VbBNZ94F1YlJMUKoz90y" target="_blank" class="gradient-button text-center">Saluran WhatsApp</a>
+    </div>
+
+    <!-- Halaman Utama (Donasi) -->
+    <main class="w-full max-w-xl mx-auto space-y-8 text-center p-4 content-hidden" id="main-content">
+        
+        <!-- Bagian Header -->
+        <div class="flex flex-col items-center">
+            <img src="https://i.ibb.co.com/ksptZTRZ/IMG-20250908-WA0052.jpg" alt="Logo Seiklahsnya" class="w-24 h-24 rounded-full mb-4">
+            <h1 class="text-4xl sm:text-5xl font-bold tracking-wider text-white">
+                Seiklahsnya
+            </h1>
+            <p class="text-sm text-gray-400 mt-2">Donasi Seikhlasnya, Berkah Selamanya.</p>
+        </div>
+
+        <!-- Bagian Tentang Saya -->
+        <div class="container-card">
+            <h2 class="text-2xl font-bold mb-4">Tentang Saya</h2>
+            <p class="text-lg text-justify leading-relaxed">
+                Halo, saya Paong. Saya adalah seorang developer yang bersemangat dalam dunia teknologi. Donasi berapapun dari Anda, itu sudah sangat membantu saya dalam pengembangan website dan proyek-proyek saya lainnya. Terima kasih atas kebaikan Anda!
+            </p>
+        </div>
+
+        <!-- Visualisasi Algoritma Selection Sort -->
+        <div class="container-card">
+            <h2 class="text-2xl font-bold mb-6">Visualisasi Selection Sort</h2>
+            <p class="mb-4 text-sm text-gray-400">
+                Masukkan angka (pisahkan dengan koma, cth: 5, 2, 8, 1) dan lihat bagaimana Selection Sort bekerja.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+                <input type="text" id="input-array" class="w-full sm:w-2/3 p-2 rounded-lg bg-[#33354b] border-2 border-transparent focus:outline-none focus:border-violet-500" placeholder="Contoh: 5, 2, 8, 1">
+                <button onclick="startSort()" class="gradient-button w-full sm:w-1/3">Mulai Sortir</button>
+            </div>
+            <div id="chart-container" class="flex items-end justify-center h-48 bg-[#1a1a2e] rounded-lg p-4"></div>
+            <p id="sort-info" class="mt-4 text-center text-sm text-gray-300"></p>
+        </div>
+
+        <!-- Opsi Donasi -->
+        <div class="container-card">
+            <h2 class="text-2xl font-bold mb-6">Pilihan Donasi</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+                <!-- Donasi DANA -->
+                <div class="bg-[#33354b] p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                    <img src="https://i.ibb.co.com/ZRFGTFZT/2979b60c38fa37d693fe472a449a7860.jpg" alt="Logo DANA" class="w-16 h-16 mb-4 rounded-full">
+                    <p class="text-xl font-semibold mb-2">DANA</p>
+                    <div class="flex items-center justify-center w-full">
+                        <span id="dana-number" class="text-lg font-mono tracking-wide mr-2">08888536312</span>
+                        <button class="copy-button" onclick="copyToClipboard('08888536312')">
+                            Salin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Donasi GOPAY -->
+                <div class="bg-[#33354b] p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                    <img src="https://i.ibb.co.com/XrJpZv5x/feceb2ca508603b06c2f7ba18a5d018d.jpg" alt="Logo GoPay" class="w-16 h-16 mb-4 rounded-full">
+                    <p class="text-xl font-semibold mb-2">GOPAY</p>
+                    <div class="flex items-center justify-center w-full">
+                        <span id="gopay-number" class="text-lg font-mono tracking-wide mr-2">08888536312</span>
+                        <button class="copy-button" onclick="copyToClipboard('08888536312')">
+                            Salin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Donasi QRIS -->
+                <div class="bg-[#33354b] p-6 rounded-lg shadow-md col-span-1 sm:col-span-2 flex flex-col items-center text-center">
+                    <img src="https://i.ibb.co.com/mFXbqws6/IMG-20250909-WA0021.jpg" alt="Kode QRIS" id="qris-image">
+                    <a href="https://i.ibb.com/mFXbqws6/IMG-20250909-WA0021.jpg" download="QRIS_Seiklahsnya.jpg" class="gradient-button mt-4">
+                        Download QRIS
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('intro-overlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('intro-overlay').style.display = 'none';
+                    document.getElementById('main-content').classList.remove('content-hidden');
+                    document.body.classList.add('loaded');
+                }, 1000);
+            }, 3000); 
+        };
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Disalin!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+
+        // Selection Sort Visualization
+        let currentArray = [];
+        let isSorting = false;
+        const chartContainer = document.getElementById('chart-container');
+        const sortInfo = document.getElementById('sort-info');
+
+        function drawBars(arr, i, j, minIdx) {
+            chartContainer.innerHTML = '';
+            if (arr.length === 0) return;
+            const maxVal = Math.max(...arr);
+            arr.forEach((value, index) => {
+                const barHeight = (value / maxVal) * 100;
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = `${barHeight}%`;
+                if (index === i) {
+                    bar.style.backgroundColor = '#fca5a5';
+                } else if (index === j) {
+                    bar.style.backgroundColor = '#fde047';
+                } else if (index === minIdx) {
+                    bar.style.backgroundColor = '#8b5cf6';
+                }
+                const label = document.createElement('div');
+                label.className = 'bar-label';
+                label.textContent = value;
+                bar.appendChild(label);
+                chartContainer.appendChild(bar);
+            });
+        }
+
+        async function selectionSort(arr) {
+            const n = arr.length;
+            sortInfo.textContent = 'Mulai mengurutkan...';
+            isSorting = true;
+            for (let i = 0; i < n - 1; i++) {
+                let minIdx = i;
+                drawBars(arr, i, null, minIdx);
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                for (let j = i + 1; j < n; j++) {
+                    drawBars(arr, i, j, minIdx);
+                    sortInfo.textContent = `Mencari nilai terkecil di area yang belum terurut. Saat ini, ${arr[j]} dibandingkan dengan ${arr[minIdx]}.`;
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    if (arr[j] < arr[minIdx]) {
+                        minIdx = j;
+                        drawBars(arr, i, j, minIdx);
+                        sortInfo.textContent = `Nilai minimum baru ditemukan: ${arr[minIdx]}.`;
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+                if (minIdx !== i) {
+                    let temp = arr[i];
+                    arr[i] = arr[minIdx];
+                    arr[minIdx] = temp;
+                    drawBars(arr, i, minIdx, i);
+                    sortInfo.textContent = `Menukar ${arr[minIdx]} dengan ${arr[i]}.`;
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+            drawBars(arr, null, null, null);
+            sortInfo.textContent = 'Pengurutan selesai! Array sudah terurut.';
+            isSorting = false;
+        }
+
+        function startSort() {
+            if (isSorting) return;
+            const inputArray = document.getElementById('input-array').value;
+            const arr = inputArray.split(',').map(s => s.trim()).filter(s => s.length > 0).map(Number);
+            if (arr.some(isNaN) || arr.length === 0) {
+                sortInfo.textContent = 'Masukkan angka yang valid, dipisahkan dengan koma.';
+                return;
+            }
+            currentArray = arr;
+            selectionSort(currentArray);
+        }
+    </script>
+</body>
+</html>
